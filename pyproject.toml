@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=67.0", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "guacamol"
+version = "0.5.5.post1"
+description = "GuacaMol: Benchmarking models for de novo molecular design — NumPy 2.x / Python 3.10-3.12 compatible fork"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "BenevolentAI", email = "guacamol@benevolent.ai" },
+    { name = "Community patch maintainer" },
+]
+keywords = ["molecular generation", "benchmarking", "drug discovery", "deep learning"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+requires-python = ">=3.9"
+
+# PATCH NOTES vs guacamol 0.5.4:
+#
+#   - REMOVED: rdkit-pypi pinned version
+#     The package was renamed from 'rdkit-pypi' to 'rdkit' on PyPI.
+#     Both install the same library. This patch removes the version pin
+#     and accepts whichever rdkit is installed (>=2022.3).
+#     Install separately: pip install rdkit
+#
+#   - REMOVED: FCD hard dependency on specific torch version
+#     fcd_torch now declares its own torch dependency correctly.
+#
+#   - FIXED: numpy 2.0 — np.bool/np.int/np.float → Python builtins
+#     NumPy removed these type aliases in 2.0.
+#
+#   - FIXED: scikit-learn 1.x API changes
+#     BaseEstimator, check_is_fitted import paths updated.
+#
+#   - FIXED: Chem.MolToSmiles default aromaticity model
+#     RDKit changed the default; explicit kekulize=False added where needed.
+#
+#   - FIXED: pkg_resources → importlib.resources (Python 3.9+ native)
+#
+#   - CHANGED: setup.py → pyproject.toml (PEP 517/518)
+
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.9.0",
+    "scikit-learn>=1.1.0",
+    "joblib>=1.0.0",
+    "tqdm>=4.26.0",
+    "fcd_torch>=1.0.5",
+    "torch>=1.9.0",
+    "requests>=2.25.0",
+]
+
+[project.optional-dependencies]
+rdkit = ["rdkit>=2022.3"]
+dev   = ["pytest>=7.0", "black", "isort"]
+
+[project.urls]
+Homepage    = "https://github.com/BenevolentAI/guacamol"
+Repository  = "https://github.com/BenevolentAI/guacamol"
+"Bug Tracker" = "https://github.com/BenevolentAI/guacamol/issues"
+
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["guacamol*"]
